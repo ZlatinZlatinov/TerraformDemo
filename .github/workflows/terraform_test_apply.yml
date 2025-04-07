@@ -13,7 +13,7 @@ env:
 
 jobs:
   terraform_test:
-    name: 'Terraform'
+    name: 'terraform_test'
     runs-on: ubuntu-latest
 
     steps:
@@ -39,7 +39,7 @@ jobs:
 
   terraform_plan:
     needs: terraform_test
-    name: Install Ubuntu
+    name: terraform_plan
     runs-on: ubuntu-latest
 
     steps:
@@ -74,7 +74,7 @@ jobs:
 
   terraform_apply:
     needs: terraform_plan
-    name: Install Ubuntu
+    name: terraform_apply
     runs-on: ubuntu-latest
 
     steps:
