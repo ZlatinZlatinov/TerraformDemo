@@ -18,7 +18,7 @@ override.tf.json
 *_override.tf.json
 
 # CLI configuration files
-*.tfvars
+#*.tfvars
 *.tfvars.json
 
 # Environment-specific configuration files (e.g., AWS credentials)
