@@ -1,0 +1,40 @@
+# Local Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Crash logs
+crash.log
+
+# Local .terraform directory (contains provider binaries and other Terraform files)
+.terraform/
+
+# .terraform.lock.hcl file (if you don't want to commit it)
+.terraform.lock.hcl
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration files
+*.tfvars
+*.tfvars.json
+
+# Environment-specific configuration files (e.g., AWS credentials)
+*.env
+
+# Backup files
+*.bak
+
+# Terraform plan output
+*.plan
+
+# IDE/editor-specific files
+.idea/
+.vscode/
+*.swp
+*~
+
+#Others 
+secret.txt
