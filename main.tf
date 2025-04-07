@@ -11,6 +11,12 @@ terraform {
       version = "=4.1.0"
     }
   }
+  backend "azurerm" {
+    resource_group_name  = "TfStorageRG"
+    storage_account_name = "zlatintaskboardstrg"
+    container_name       = "zlatintbcontainer"
+    key                  = "terraform.tfstate"
+  }
 }
 
 # Configure the Microsoft Azure Provider

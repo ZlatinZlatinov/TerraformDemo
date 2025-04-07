@@ -5,7 +5,11 @@ on:
     branches: [ "main" ]
   pull_request:
 
-
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  ARM_SUBSCRIPTIO_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
 jobs:
   terraform_test:
@@ -25,13 +29,79 @@ jobs:
     - name: Terraform Init
       run: terraform init 
 
-    - name: Check who am i
-      run: whoami
-
     # Checks that all Terraform configuration files adhere to a canonical format
     # If files are not formated by using -check, job will fail
     - name: Terraform Format
       run: terraform fmt -check 
 
     - name: Validate Terraform Files
-      run: terraform validate
+      run: terraform validate 
+
+  terraform_plan:
+    needs: terraform_test
+    name: Install Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+
+    # Login To Azure
+    - name: Login To Azure 
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init 
+    
+    # Generate Plan
+    - name: Generate Terraform Plan
+      run: terraform plan -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" -out=tfplan.plan
+
+    # Save Artefact 
+    - name: Save Terraform Plan Artifact 
+      uses: actions/upload-artifact@v4
+      with:
+        name: terraform-plan-artifact
+        path: tfplan
+
+  terraform_apply:
+    needs: terraform_plan
+    name: Install Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+
+    # Login To Azure
+    - name: Login To Azure 
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init 
+
+    # Download Artifact 
+    - name: Save Terraform Plan Artifact 
+      uses: actions/download-artifact@v4
+      with:
+        name: terraform-plan-artifact 
+    
+    # Apply
+    - name: Apply The Terraform Plan
+      run: terraform apply -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" -auto-approve tfplan.plan

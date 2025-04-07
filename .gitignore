@@ -29,6 +29,7 @@ override.tf.json
 
 # Terraform plan output
 *.plan
+tfplan
 
 # IDE/editor-specific files
 .idea/
