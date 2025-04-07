@@ -32,12 +32,12 @@ resource "random_integer" "randint" {
 }
 
 resource "azurerm_resource_group" "arg" {
-  name     = var.resource_group_name + tostring(random_integer.randint.result)
+  name     = "${var.resource_group_name}${random_integer.randint.result}"
   location = var.resource_group_location
 }
 
 resource "azurerm_service_plan" "azserpln" {
-  name                = var.appservice_plan_name + tostring(random_integer.randint.result)
+  name                = "${var.appservice_plan_name}${random_integer.randint.result}"
   resource_group_name = azurerm_resource_group.arg.name
   location            = azurerm_resource_group.arg.location
   os_type             = "Linux"
@@ -52,7 +52,7 @@ resource "azurerm_app_service_source_control" "azappsersctrl" {
 }
 
 resource "azurerm_mssql_server" "azmssqls" {
-  name                         = var.sql_server_name + tostring(random_integer.randint.result)
+  name                         = "${var.sql_server_name}${random_integer.randint.result}"
   resource_group_name          = azurerm_resource_group.arg.name
   location                     = azurerm_resource_group.arg.location
   version                      = "12.0"
@@ -61,7 +61,7 @@ resource "azurerm_mssql_server" "azmssqls" {
 }
 
 resource "azurerm_mssql_database" "azmssqldb" {
-  name           = var.sql_database_name + tostring(random_integer.randint.result)
+  name           = "${var.sql_database_name}${random_integer.randint.result}"
   server_id      = azurerm_mssql_server.azmssqls.id
   collation      = "SQL_Latin1_General_CP1_CI_AS"
   license_type   = "LicenseIncluded"
@@ -71,7 +71,7 @@ resource "azurerm_mssql_database" "azmssqldb" {
 }
 
 resource "azurerm_linux_web_app" "azlwebapp" {
-  name                = var.appservice_name + tostring(random_integer.randint.result)
+  name                = "${var.appservice_name}${random_integer.randint.result}"
   resource_group_name = azurerm_resource_group.arg.name
   location            = azurerm_service_plan.azserpln.location
   service_plan_id     = azurerm_service_plan.azserpln.id
@@ -91,7 +91,7 @@ resource "azurerm_linux_web_app" "azlwebapp" {
 }
 
 resource "azurerm_mssql_firewall_rule" "azmsssqlfirewall" {
-  name             = var.firewall_rule_name + tostring(random_integer.randint.result)
+  name             = "${var.firewall_rule_name}${random_integer.randint.result}"
   server_id        = azurerm_mssql_server.azmssqls.id
   start_ip_address = "0.0.0.0"
   end_ip_address   = "0.0.0.0"
