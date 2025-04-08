@@ -1,5 +1,4 @@
-# We strongly recommend using the required_providers block to set the
-# Azure Provider source and version being used 
+# We strongly recommend using the required_providers
 # To add dynamycally vatiables use this: 
 # terraform apply -var="subscription_id=$(az account show --query id -o tsv)"
 # terraform apply -var-file="variables.tfvars"
