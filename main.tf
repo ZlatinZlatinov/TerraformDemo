@@ -12,8 +12,8 @@ terraform {
   }
   backend "azurerm" {
     resource_group_name  = "TfStorageRG"
-    storage_account_name = "zlatintaskboardstrg"
-    container_name       = "zlatintbcontainer"
+    storage_account_name = "zlatintbstorage"
+    container_name       = "tbcontainerzl"
     key                  = "terraform.tfstate"
   }
 }
