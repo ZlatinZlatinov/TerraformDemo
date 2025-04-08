@@ -97,7 +97,7 @@ jobs:
       run: terraform init 
 
     # Download Artifact 
-    - name: Save Terraform Plan Artifact 
+    - name: Download Terraform Plan Artifact 
       uses: actions/download-artifact@v4
       with:
         name: terraform-plan-artifact 
